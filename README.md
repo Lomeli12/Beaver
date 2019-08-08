@@ -12,6 +12,7 @@ To build Beaver, you'll need to install the following dependencies.
 
 * `glib-2.0`
 * `json-glib-1.0`
+* `valac`
 
 Then, you can either build using ***beaver***.
 
