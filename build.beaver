@@ -1,0 +1,26 @@
+# Beaver build file
+# Is just JSON, but lines beginning 
+# with '#' are ignored so you can add comments!
+{
+    # appInfo block is required
+    "appinfo": {
+        # required
+        "name": "Beaver",
+        # required
+        "mainFile": "Beaver.vala",
+        # optional
+        "exeName": "beaver",
+        # optional
+        "version": "0.0.1"
+    },
+    # list dependencies your project uses
+    # technically optional, but pretty much
+    # any Vala project needs gio.
+    # Make sure any library you use here is
+    # installed by your distro's package manager
+    # of choice
+    "dependencies": [
+        "gio-2.0",
+        "json-glib-1.0"
+    ]
+}
