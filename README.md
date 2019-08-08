@@ -14,13 +14,13 @@ To build Beaver, you'll need to install the following dependencies.
 * `json-glib-1.0`
 * `valac`
 
-Then, you can either build using ***beaver***.
+Then, you can either build using `beaver`:
 
 ```
 beaver build
 ```
 
-or use Valac
+or use `Valac`:
 
 ```
 valac -o beaver --pkg json-glib-1.0 --pkg gio-2.0 --pkg posix src/main/vala/Beaver.vala src/main/vala/lib/*.vala src/main/vala/lib/logging/*.vala src/main/vala/beaver/*.vala src/main/vala/parse/*.vala
