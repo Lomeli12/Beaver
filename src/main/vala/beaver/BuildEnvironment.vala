@@ -87,7 +87,42 @@ public class BuildEnvironment {
     }
 
     public static int cleanBuildFolder() {
-        stdout.printf("Cleaning build folder\n");
-        return DirUtils.remove(BUILD_FOLDER);
+        stdout.printf(@"Cleaing build folder\n");
+        if (!FileUtils.test(BUILD_FOLDER, FileTest.IS_DIR) || rmDir(BUILD_FOLDER)) {
+            return 0;
+        }
+        return 1;
+    }
+
+    static bool rmDir(string path, uint level = 0) {
+        ++level;
+        bool flag = false;
+        
+		try {
+			var directory = GLib.File.new_for_path(path);
+
+			var enumerator = directory.enumerate_children(GLib.FileAttribute.STANDARD_NAME, 0);
+
+			GLib.FileInfo file_info;
+			while((file_info = enumerator.next_file()) != null) {
+
+                string file_name = file_info.get_name();
+                
+				if((file_info.get_file_type()) == GLib.FileType.DIRECTORY) {
+					rmDir(path + file_name + "/", level);
+                }
+                
+				var file = directory.get_child(file_name);
+				file.delete();
+            }
+            
+			if(level == 1) {
+                directory.delete();
+                flag = true;
+			}
+		} catch (Error e) {
+			stderr.printf(@"Failed to delete build folder:\n%s\n", e.message);
+		}
+		return flag;
     }
 }
