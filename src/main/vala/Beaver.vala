@@ -1,5 +1,6 @@
 public class Beaver {
     public static int main(string[] args) {
+        var startTime = TimeUtil.getCurrentTime();
         var retValue = 0;
         if (args.length == 1) {
             retValue = noArgDisplay();
@@ -19,10 +20,12 @@ public class Beaver {
                     break;
             }
         }
+        var finishTime = TimeUtil.getCurrentTime();
+        var timeSpent = (finishTime - startTime) / 1000000f;
         if (retValue == 0) {
-            stdout.printf(@"\033[1;32m%s\033[0m\n", "BUILD SUCCESSFUL");
+            stdout.printf(@"\033[1;32m%s\033[0m in %f(s)\n", "BUILD SUCCESSFUL", timeSpent);
         } else {
-            stdout.printf(@"\033[1;31m%s\033[0m\n", "BUILD FAILED");
+            stdout.printf(@"\033[1;31m%s\033[0m in %f(s)\n", "BUILD FAILED", timeSpent);
         }
         return retValue;
     }
