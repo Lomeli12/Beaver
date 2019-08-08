@@ -1,5 +1,5 @@
 public class Parser {
-    public static BeaverFile getBuildFile() {
+    public static BeaverProject getBuildFile() {
         var file = File.new_for_path(Constants.BUILD_FILE);
         if (!file.query_exists()) {
             stdout.printf(@"Could not find build.beaver!\n");
@@ -13,7 +13,7 @@ public class Parser {
         return parseBuildFile(fileData);
     }
 
-    static BeaverFile parseBuildFile(string data) {
+    static BeaverProject parseBuildFile(string data) {
         try {
             var parser = new Json.Parser();
             parser.load_from_data(data, -1);
@@ -24,7 +24,7 @@ public class Parser {
                 stderr.printf(@"Could not get \"appinfo\"");
                 return null;
             }
-            var buildFile = new BeaverFile(appInfo);
+            var buildFile = new BeaverProject(appInfo);
 
             if (root.has_member("dependencies")) {
                 parseDependencies(root, buildFile);
@@ -65,7 +65,7 @@ public class Parser {
         return new AppInfo(values[0], values[1], values[2], values[3]);
     }
 
-    static void parseDependencies(Json.Object root, BeaverFile buildFile) {
+    static void parseDependencies(Json.Object root, BeaverProject buildFile) {
         var jsonDep = root.get_array_member("dependencies");
         for (int i = 0; i < jsonDep.get_length(); i++) {
             buildFile.addDependency(jsonDep.get_string_element(i));

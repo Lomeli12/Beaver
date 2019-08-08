@@ -1,8 +1,8 @@
-public class BeaverFile {
+public class BeaverProject {
     AppInfo info;
     string[] dependencies;
 
-    public BeaverFile(AppInfo info) {
+    public BeaverProject(AppInfo info) {
         this.info = info;
         this.dependencies = {};
     }
