@@ -32,14 +32,15 @@ public class Beaver {
     }
 
     static int build() {
-        var buildFile = Parser.getBuildFile();
-        if (buildFile != null) {
-            var mainFile = File.new_for_path(buildFile.getAppInfo().getMainFile());
-            if (!mainFile.query_exists()) {
-                stdout.printf(@"\033[31mCould not find main file: %s\033[0m", buildFile.getAppInfo().getMainFile());
-                return 0;
+        var beaverProject = Parser.getBuildFile();
+        if (beaverProject != null) {
+            stdout.printf(@"Starting Build\n");
+            if (BuildEnvironment.buildProject(beaverProject)) {
+                stdout.printf(@"\033[1;32m%s\033[0m %s", "BUILD SUCCESSFUL", "in IDK how many seconds.\n");
+            } else {
+                stdout.printf(@"\033[1;31m%s\033[0m %s", "BUILD FAILED", "in IDK how many seconds.\n");
+                return 1;
             }
-            stdout.printf(@"Running valac\n");
         } else {
             stderr.printf(@"Invalid build.beaver.\n");
             return 1;
