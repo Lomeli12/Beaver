@@ -11,7 +11,10 @@ public class Beaver {
                 case "build":
                     retValue = build();
                     break;
-                default:
+                case "clean":
+                    retValue = BuildEnvironment.cleanBuildFolder();
+                    break;
+                case "help":
                     retValue = listArguments();
                     break;
             }

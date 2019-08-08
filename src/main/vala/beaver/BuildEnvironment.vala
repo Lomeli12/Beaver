@@ -86,4 +86,8 @@ public class BuildEnvironment {
         return DirUtils.create_with_parents(BUILD_FOLDER, 0777) == 0;
     }
 
+    public static int cleanBuildFolder() {
+        stdout.printf("Cleaning build folder\n");
+        return DirUtils.remove(BUILD_FOLDER);
+    }
 }
