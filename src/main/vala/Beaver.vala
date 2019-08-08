@@ -20,12 +20,12 @@ public class Beaver {
     }
 
     static int validate() {
-        var buildFile = Parser.getBuildFile();
-        if (buildFile != null) {
-            stdout.printf(buildFile.toString());
+        var beaverProject = Parser.getBuildFile();
+        if (beaverProject != null) {
+            stdout.printf(beaverProject.toString());
 
         } else {
-            stdout.printf(@"Invalid build.beaver.\n");
+            stderr.printf(@"Invalid build.beaver.\n");
             return 1;
         }
         return 0;
@@ -41,7 +41,7 @@ public class Beaver {
             }
             stdout.printf(@"Running valac\n");
         } else {
-            stdout.printf(@"Invalid build.beaver.\n");
+            stderr.printf(@"Invalid build.beaver.\n");
             return 1;
         }
         return 0;

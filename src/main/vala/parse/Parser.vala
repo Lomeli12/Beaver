@@ -24,12 +24,12 @@ public class Parser {
                 stderr.printf(@"Could not get \"appinfo\"");
                 return null;
             }
-            var buildFile = new BeaverProject(appInfo);
+            var beaverProject = new BeaverProject(appInfo);
 
             if (root.has_member("dependencies")) {
-                parseDependencies(root, buildFile);
+                parseDependencies(root, beaverProject);
             }
-            return buildFile;
+            return beaverProject;
         } catch (Error e) {
             stderr.printf("Failed to parse build.beaver!\n%s\n", e.message);
         }
@@ -65,10 +65,10 @@ public class Parser {
         return new AppInfo(values[0], values[1], values[2], values[3]);
     }
 
-    static void parseDependencies(Json.Object root, BeaverProject buildFile) {
+    static void parseDependencies(Json.Object root, BeaverProject beaverProject) {
         var jsonDep = root.get_array_member("dependencies");
         for (int i = 0; i < jsonDep.get_length(); i++) {
-            buildFile.addDependency(jsonDep.get_string_element(i));
+            beaverProject.addDependency(jsonDep.get_string_element(i));
         }
     }
 }
