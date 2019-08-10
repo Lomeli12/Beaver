@@ -1,62 +1,62 @@
 using Beaver.Util;
 
 namespace Beaver.Logging {
-	public class Logger {
-		string name;
+        public class Logger {
+        string name;
 
-		public Logger(string name){
-			this.name = name;
-		}
+        public Logger(string name){
+            this.name = name;
+        }
 
-		public Logger.empty() {
-			this("");
-		}
+        public Logger.empty() {
+            this("");
+        }
 
-		private void log(string type, string message) {
-			if (StringUtil.isNullOrWhitespace(message)) {
-				return;
-			}
-			var builder = new StringBuilder();
-			builder.append_printf("[%s]", type);
-			builder.append_printf("[%s]", getFormattedTime());
-			if (!StringUtil.isNullOrWhitespace(this.name)) {
-				builder.append_printf("[%s]", this.name);
-			}
-			builder.append_printf(": %s\n", message);
-			var msg = builder.str;
-			stdout.printf(msg);
-			//TODO: Save to log file
-		}
+        private void log(string type, string message) {
+            if (StringUtil.isNullOrWhitespace(message)) {
+            return;
+            }
+            var builder = new StringBuilder();
+            builder.append_printf("[%s]", type);
+            builder.append_printf("[%s]", getFormattedTime());
+            if (!StringUtil.isNullOrWhitespace(this.name)) {
+                builder.append_printf("[%s]", this.name);
+            }
+            builder.append_printf(": %s\n", message);
+            var msg = builder.str;
+            stdout.printf(msg);
+            //TODO: Save to log file
+        }
 
-		public void info(string message, ...) {
-			var list = va_list();
-			log("INFO", message.vprintf(list));
-		}
+        public void info(string message, ...) {
+            var list = va_list();
+            log("INFO", message.vprintf(list));
+        }
 
-		public void warn(string message, ...) {
-			var list = va_list();
-			log("WARN", message.vprintf(list));
-		}
+        public void warn(string message, ...) {
+            var list = va_list();
+            log("WARN", message.vprintf(list));
+        }
 
-		public void debug(string message, ...) {
-			var list = va_list();
-			log("DEBUG", message.vprintf(list));
-		}
+        public void debug(string message, ...) {
+            var list = va_list();
+            log("DEBUG", message.vprintf(list));
+        }
 
-		public void error(string message, ...) {
-			var list = va_list();
-			log("ERROR", message.vprintf(list));
-		}
+        public void error(string message, ...) {
+            var list = va_list();
+            log("ERROR", message.vprintf(list));
+        }
 
-		public void logNoStamp(string message, ...) {
-			var list = va_list();
-			var msg = message.vprintf(list) + "\n";
-			stdout.printf(msg);
-			//TODO: Save to log file
-		}
+        public void logNoStamp(string message, ...) {
+            var list = va_list();
+            var msg = message.vprintf(list) + "\n";
+            stdout.printf(msg);
+            //TODO: Save to log file
+        }
 
-		public string createFormat(int[] formatCodes) {
-			if (formatCodes == null || formatCodes.length == 0) {
+        public string createFormat(int[] formatCodes) {
+            if (formatCodes == null || formatCodes.length == 0) {
                 return "";
             }
             var builder = new StringBuilder();
@@ -70,10 +70,10 @@ namespace Beaver.Logging {
             }
             var format = builder.str;
             return format.substring(0, format.length) + "m";
-		}
+        }
 
-		private string getFormattedTime() {
-			return new DateTime.now_local().format("%H:%M:%S");
-		}
-	}
+        private string getFormattedTime() {
+            return new DateTime.now_local().format("%H:%M:%S");
+        }
+    }
 }
