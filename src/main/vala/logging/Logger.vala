@@ -73,7 +73,7 @@ namespace Beaver.Logging {
 		}
 
 		private string getFormattedTime() {
-			return new DateTime.now().format("%H:%M:%S");
+			return new DateTime.now_local().format("%H:%M:%S");
 		}
 	}
 }
