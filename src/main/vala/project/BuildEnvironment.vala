@@ -28,7 +28,7 @@ namespace Beaver.Project {
                 sources.append(file + " ");
             }
 
-            stdout.printf(@"Creating preparing build...\n");
+            stdout.printf(@"Preparing to build...\n");
             makeBuildFolder();
             var output = "-o " + BUILD_FOLDER;
             if (!StringUtil.isNullOrWhitespace(project.getAppInfo().getExecutableName())) {
