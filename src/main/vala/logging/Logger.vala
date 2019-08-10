@@ -1,4 +1,5 @@
 using Beaver.Util;
+
 namespace Beaver.Logging {
 	public class Logger {
 		string name;
@@ -11,7 +12,7 @@ namespace Beaver.Logging {
 			this("");
 		}
 
-		private void log(string type, string message, ...) {
+		private void log(string type, string message) {
 			if (StringUtil.isNullOrWhitespace(message)) {
 				return;
 			}
@@ -21,47 +22,37 @@ namespace Beaver.Logging {
 			if (!StringUtil.isNullOrWhitespace(this.name)) {
 				builder.append_printf("[%s]", this.name);
 			}
-			builder.append(": ");
-			builder.append(formatString(message, va_list()) + "\n");
+			builder.append_printf(": %s\n", message);
 			var msg = builder.str;
 			stdout.printf(msg);
 			//TODO: Save to log file
 		}
 
 		public void info(string message, ...) {
-			log("INFO", message, va_list());
+			var list = va_list();
+			log("INFO", message.vprintf(list));
 		}
 
 		public void warn(string message, ...) {
-			log("WARN", message, va_list());
+			var list = va_list();
+			log("WARN", message.vprintf(list));
 		}
 
 		public void debug(string message, ...) {
-			log("DEBUG", message, va_list());
+			var list = va_list();
+			log("DEBUG", message.vprintf(list));
 		}
 
 		public void error(string message, ...) {
-			log("ERROR", message, va_list());
+			var list = va_list();
+			log("ERROR", message.vprintf(list));
 		}
 
 		public void logNoStamp(string message, ...) {
-			var msg = formatString(message, va_list());
+			var list = va_list();
+			var msg = message.vprintf(list) + "\n";
 			stdout.printf(msg);
 			//TODO: Save to log file
-		}
-
-		private string formatString(string message, ...) {
-			var varargs = va_list();
-			string str;
-			while ((str = varargs.arg()) != null) {
-				if (!message.contains("{}")) {
-					break;
-				}
-				var index = message.index_of("{}");
-				var newMsg = message.splice(index, index + 1, str);
-				message = newMsg;
-			}
-			return message;
 		}
 
 		public string createFormat(int[] formatCodes) {
