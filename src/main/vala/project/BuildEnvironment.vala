@@ -1,3 +1,4 @@
+using Beaver;
 using Beaver.Util;
 
 namespace Beaver.Project {
@@ -10,25 +11,25 @@ namespace Beaver.Project {
         public static const string CODE_FOLDER = MAIN_FOLDER + "vala/";
 
         public static bool buildProject(BeaverProject project) {
-            stdout.printf(@"Verifying project structure.\n");
+            Beaver.log.logNoStamp(@"Verifying project structure.\n");
             if (!validateFolderStruct()) {
-                stdout.printf(@"Missing source folder. Ensure your code is located in \"src/main/vala\" of this directory.\n");
+                Beaver.log.error(@"Missing source folder. Ensure your code is located in \"src/main/vala\" of this directory.\n");
                 return false;
             }
             var mainFilePath = CODE_FOLDER + project.getAppInfo().getMainFile();
             var mainFile = File.new_for_path(mainFilePath);
             if (!mainFile.query_exists()) {
-                stdout.printf(@"\033[31mCould not find main file: %s\033[0m\n", project.getAppInfo().getMainFile());
+                Beaver.log.error(@"\033[31mCould not find main file: %s\033[0m\n", project.getAppInfo().getMainFile());
                 return false;
             }
-            stdout.printf(@"Locating source files...\n");
+            Beaver.log.logNoStamp(@"Locating source files...\n");
             var sourceFiles = locateSourceFiles(CODE_FOLDER, mainFilePath, true);
             var sources = new StringBuilder();
             foreach (string file in sourceFiles) {
                 sources.append(file + " ");
             }
 
-            stdout.printf(@"Preparing to build...\n");
+            Beaver.log.logNoStamp(@"Preparing to build...\n");
             makeBuildFolder();
             var output = "-o " + BUILD_FOLDER;
             if (!StringUtil.isNullOrWhitespace(project.getAppInfo().getExecutableName())) {
@@ -40,7 +41,7 @@ namespace Beaver.Project {
                 deps.append("--pkg " + dep + " ");
             }
 
-            stdout.printf(@"Running Valac\n");
+            Beaver.log.logNoStamp(@"Running Valac\n");
             var command = "valac " + output + deps.str + sources.str;
             var result = Posix.system(command);
             return result == 0;
@@ -90,7 +91,7 @@ namespace Beaver.Project {
         }
 
         public static int cleanBuildFolder() {
-            stdout.printf(@"Cleaing build folder\n");
+            Beaver.log.logNoStamp(@"Cleaing build folder\n");
             if (!FileUtils.test(BUILD_FOLDER, FileTest.IS_DIR) || rmDir(BUILD_FOLDER)) {
                 return 0;
             }
@@ -124,7 +125,7 @@ namespace Beaver.Project {
                     flag = true;
     			}
     		} catch (Error e) {
-    			stderr.printf(@"Failed to delete build folder:\n%s\n", e.message);
+    			Beaver.log.error(@"Failed to delete build folder:\n%s\n", e.message);
     		}
     		return flag;
         }

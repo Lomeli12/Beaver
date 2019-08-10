@@ -1,9 +1,13 @@
 using Beaver.Project;
 using Beaver.Util;
+using Beaver.Logging;
 
 namespace Beaver {
     public class Beaver {
+        public static Logger log;
+
         public static int main(string[] args) {
+            log = new Logger.empty();
             var startTime = get_monotonic_time();
             var retValue = 0;
             if (args.length == 1) {
@@ -27,9 +31,9 @@ namespace Beaver {
             var finishTime = get_monotonic_time();
             var timeSpent = (finishTime - startTime) / 1000000f;
             if (retValue == 0) {
-                stdout.printf(@"\033[1;32m%s\033[0m in %f(s)\n", "BUILD SUCCESSFUL", timeSpent);
+                log.logNoStamp(@"\033[1;32m%s\033[0m in %f(s)", "BUILD SUCCESSFUL", timeSpent);
             } else {
-                stdout.printf(@"\033[1;31m%s\033[0m in %f(s)\n", "BUILD FAILED", timeSpent);
+                log.logNoStamp("\033[1;31m%s\033[0m in %f(s)", "BUILD FAILED", timeSpent);
             }
             return retValue;
         }
@@ -37,9 +41,10 @@ namespace Beaver {
         static int validate() {
             var beaverProject = Parser.getBuildFile();
             if (beaverProject != null) {
-                stdout.printf(beaverProject.toString());
+                var project = beaverProject.toString();
+                log.logNoStamp(project.substring(0, project.length - 2));
             } else {
-                stderr.printf(@"Invalid build.beaver.\n");
+                log.logNoStamp("Invalid build.beaver.");
                 return 1;
             }
             return 0;
@@ -48,34 +53,31 @@ namespace Beaver {
         static int build() {
             var beaverProject = Parser.getBuildFile();
             if (beaverProject != null) {
-                stdout.printf(@"Starting Build\n");
+                log.logNoStamp("Starting Build");
                 if (!BuildEnvironment.buildProject(beaverProject)) {
                     return 1;
                 }
             } else {
-                stderr.printf(@"Invalid build.beaver.\n");
+                log.logNoStamp("Invalid build.beaver.");
                 return 1;
             }
             return 0;
         }
 
         static int noArgDisplay() {
-            var builder = new StringBuilder();
-            builder.append_printf("\033[1;32m%s\033[0m", @"Welcome to Beaver 0.0.1\n\n");
-            builder.append_printf("To run a build, run \033[1mbeaver build\033[0m\n\n");
-            builder.append_printf("To see a list of command-line options, run \033[1mbeaver help\033[0m\n\n");
-            builder.append_printf("For submitting an issue, visit \033[1mhttps://github.com/Lomeli12/Beaver\033[0m\n\n");
-            stdout.printf(builder.str);
+            log.logNoStamp("\033[1;32m%s\033[0m\n", "Welcome to Beaver 0.0.1");
+            log.logNoStamp("To run a build, run \033[1m%s\033[0m\n", "beaver build");
+            log.logNoStamp("To see a list of command-line options, run \033[1m%s\033[0m\n", "beaver help");
+            log.logNoStamp("For submitting an issue, visit \033[1m%s\033[0m\n", "https://github.com/Lomeli12/Beaver");
             return 0;
         }
 
         static int listArguments() {
-            var builder = new StringBuilder();
-            builder.append_printf("\033[1;32m%s\033[0m", @"Welcome to Beaver 0.0.1\n");
-            builder.append_printf("\033[32m%s\033[33m - %s\033[0m\n", "build", "Compiles the project.");
-            builder.append_printf("\033[32m%s\033[33m - %s\033[0m\n", "clean", "Deletes the build directory.");
-            builder.append_printf("\033[32m%s\033[33m - %s\033[0m\n", "validate", "Reads out and prints information from the project's build.beaver for manual inspection.");
-            stdout.printf(builder.str);
+            log.logNoStamp("\033[1;32m%s\033[0m", @"Welcome to Beaver 0.0.1\n");
+            log.logNoStamp("\033[32m%s\033[33m - %s\033[0m", "build", "Compiles the project.");
+            log.logNoStamp("\033[32m%s\033[33m - %s\033[0m", "clean", "Deletes the build directory.");
+            log.logNoStamp("\033[32m%s\033[33m - %s\033[0m", "validate", "Reads out and prints information from the project's build.beaver for manual inspection.");
+            log.logNoStamp("");
             return 0;
         }
     }
