@@ -42,7 +42,7 @@ namespace Beaver.Project {
             }
 
             Beaver.log.logNoStamp(@"Running Valac");
-            var command = "valac " + output + deps.str + sources.str;
+            var command = "valac -X -w " + output + deps.str + sources.str;
             var result = Posix.system(command);
             return result == 0;
         }
