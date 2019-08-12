@@ -23,8 +23,11 @@ namespace Beaver {
                     case "clean":
                         retValue = BuildEnvironment.cleanBuildFolder();
                         break;
-                    case "help":
+                    case "tasks":
                         retValue = listArguments();
+                        break;
+                    case "help":
+                        retValue = noArgDisplay();
                         break;
                 }
             }
@@ -67,7 +70,7 @@ namespace Beaver {
         static int noArgDisplay() {
             log.logNoStamp("\033[1;32m%s\033[0m\n", "Welcome to Beaver 0.0.1");
             log.logNoStamp("To run a build, run \033[1m%s\033[0m\n", "beaver build");
-            log.logNoStamp("To see a list of command-line options, run \033[1m%s\033[0m\n", "beaver help");
+            log.logNoStamp("To see a list of command-line options, run \033[1m%s\033[0m\n", "beaver tasks");
             log.logNoStamp("For submitting an issue, visit \033[1m%s\033[0m\n", "https://github.com/Lomeli12/Beaver");
             return 0;
         }
