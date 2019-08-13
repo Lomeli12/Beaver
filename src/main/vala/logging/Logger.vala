@@ -14,7 +14,7 @@ namespace Beaver.Logging {
 
         private void log(string type, string message) {
             if (StringUtil.isNullOrWhitespace(message)) {
-            return;
+                return;
             }
             var builder = new StringBuilder();
             builder.append_printf("[%s]", type);

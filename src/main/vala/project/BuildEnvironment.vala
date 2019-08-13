@@ -54,7 +54,6 @@ namespace Beaver.Project {
             }
             var sourceDir = Dir.open(path, 0);
             var name = "";
-            var x = true; 
             while((name = sourceDir.read_name()) != null) {
                 var filePath = Path.build_filename(path, name);
                 if (filePath == mainFile)
