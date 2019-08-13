@@ -11,7 +11,7 @@ namespace Beaver.Project {
         public static const string CODE_FOLDER = MAIN_FOLDER + "vala/";
 
         public static bool buildProject(BeaverProject project) {
-            Beaver.log.logNoStamp(@"Verifying project structure.");
+            Beaver.log.info(@"Verifying project structure.");
             if (!validateFolderStruct()) {
                 Beaver.log.error(@"Missing source folder. Ensure your code is located in \"src/main/vala\" of this directory.");
                 return false;
@@ -22,14 +22,14 @@ namespace Beaver.Project {
                 Beaver.log.error(@"\033[31mCould not find main file: %s\033[0m", project.getAppInfo().getMainFile());
                 return false;
             }
-            Beaver.log.logNoStamp(@"Locating source files...");
+            Beaver.log.info(@"Locating source files...");
             var sourceFiles = locateSourceFiles(CODE_FOLDER, mainFilePath, true);
             var sources = new StringBuilder();
             foreach (string file in sourceFiles) {
                 sources.append(file + " ");
             }
 
-            Beaver.log.logNoStamp(@"Preparing to build...");
+            Beaver.log.info(@"Preparing to build...");
             makeBuildFolder();
             var output = "-o " + BUILD_FOLDER;
             if (!StringUtil.isNullOrWhitespace(project.getAppInfo().getExecutableName())) {
@@ -41,7 +41,7 @@ namespace Beaver.Project {
                 deps.append("--pkg " + dep + " ");
             }
 
-            Beaver.log.logNoStamp(@"Running Valac");
+            Beaver.log.info(@"Running Valac");
             var command = "valac -X -w " + output + deps.str + sources.str;
             var result = Posix.system(command);
             return result == 0;
@@ -90,7 +90,7 @@ namespace Beaver.Project {
         }
 
         public static int cleanBuildFolder() {
-            Beaver.log.logNoStamp(@"Cleaing build folder");
+            Beaver.log.info(@"Cleaing build folder");
             if (!FileUtils.test(BUILD_FOLDER, FileTest.IS_DIR) || rmDir(BUILD_FOLDER)) {
                 return 0;
             }

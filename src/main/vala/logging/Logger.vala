@@ -3,6 +3,7 @@ using Beaver.Util;
 namespace Beaver.Logging {
         public class Logger {
         string name;
+        bool verbose;
 
         public Logger(string name){
             this.name = name;
@@ -17,12 +18,15 @@ namespace Beaver.Logging {
                 return;
             }
             var builder = new StringBuilder();
-            builder.append_printf("[%s]", type);
-            builder.append_printf("[%s]", getFormattedTime());
-            if (!StringUtil.isNullOrWhitespace(this.name)) {
-                builder.append_printf("[%s]", this.name);
+            if (verbose) {
+                builder.append_printf("[%s]", type);
+                builder.append_printf("[%s]", getFormattedTime());
+                if (!StringUtil.isNullOrWhitespace(this.name)) {
+                    builder.append_printf("[%s]", this.name);
+                }
+                builder.append(": ");
             }
-            builder.append_printf(": %s\n", message);
+            builder.append_printf("%s\n", message);
             var msg = builder.str;
             stdout.printf(msg);
             //TODO: Save to log file
@@ -48,11 +52,9 @@ namespace Beaver.Logging {
             log("ERROR", message.vprintf(list));
         }
 
-        public void logNoStamp(string message, ...) {
-            var list = va_list();
-            var msg = message.vprintf(list) + "\n";
-            stdout.printf(msg);
-            //TODO: Save to log file
+        public Logger setVerbose(bool val) {
+            this.verbose = val;
+            return this;
         }
 
         public string createFormat(int[] formatCodes) {
