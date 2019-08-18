@@ -68,22 +68,26 @@ namespace Beaver.Project {
             if (includeMain) {
                 files += mainFile;
             }
-            var sourceDir = Dir.open(path, 0);
-            var name = "";
-            while((name = sourceDir.read_name()) != null) {
-                var filePath = Path.build_filename(path, name);
-                if (filePath == mainFile)
-                    continue;
-                if (FileUtils.test(filePath, FileTest.IS_REGULAR) && filePath.has_suffix(".vala")) {
-                    files += filePath;
-                } else if (FileUtils.test(filePath, FileTest.IS_DIR)) {
-                    var subDirFiles = locateSourceFiles(filePath, mainFile, false);
-                    if (subDirFiles.length > 0) {
-                        foreach (string file in subDirFiles) {
-                            files += file;
+            try {
+                var sourceDir = Dir.open(path, 0);
+                var name = "";
+                while((name = sourceDir.read_name()) != null) {
+                    var filePath = Path.build_filename(path, name);
+                    if (filePath == mainFile)
+                        continue;
+                    if (FileUtils.test(filePath, FileTest.IS_REGULAR) && filePath.has_suffix(".vala")) {
+                        files += filePath;
+                    } else if (FileUtils.test(filePath, FileTest.IS_DIR)) {
+                        var subDirFiles = locateSourceFiles(filePath, mainFile, false);
+                        if (subDirFiles.length > 0) {
+                            foreach (string file in subDirFiles) {
+                                files += file;
+                            }
                         }
                     }
                 }
+            } catch (GLib.FileError e) {
+                Beaver.log.error(@"Error while attempting to search source folder.\n%s", e.message);
             }
             return files;
         }

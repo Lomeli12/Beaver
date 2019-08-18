@@ -6,16 +6,13 @@ namespace Beaver.Util {
 
         public static string readAllLines(File file) {
             if (!file.query_exists()) {
-                return null;
+                return "";
             }
-            string fileData = null;
+            string fileData = "";
             try {
                 var dis = new DataInputStream(file.read());
                 string line;
                 while ((line = dis.read_line(null)) != null) {
-                    if (fileData == null) {
-                        fileData = "";
-                    }
                     line = line.strip();
                     if (!line.has_prefix("#")) {
                         fileData += line + "\n";
