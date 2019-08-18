@@ -29,14 +29,18 @@ namespace Beaver {
                     case "help":
                         retValue = noArgDisplay();
                         break;
+                    default:
+                        log.warn(@"\033[31mUnknown command: %s\033[0m", args[1]);
+                        retValue = noArgDisplay();
+                        break;
                 }
             }
             var finishTime = get_monotonic_time();
-            var timeSpent = (finishTime - startTime) / 1000000f;
+            var timeSpent = (int) Math.rintf((finishTime - startTime) / 1000000f);
             if (retValue == 0) {
-                log.info(@"\033[1;32m%s\033[0m in %f(s)", "BUILD SUCCESSFUL", timeSpent);
+                log.info(@"\033[1;32m%s\033[0m in %ds", "BUILD SUCCESSFUL", timeSpent);
             } else {
-                log.info(@"\033[1;31m%s\033[0m in %f(s)", "BUILD FAILED", timeSpent);
+                log.info(@"\033[1;31m%s\033[0m in %ds", "BUILD FAILED", timeSpent);
             }
             return retValue;
         }
@@ -79,8 +83,7 @@ namespace Beaver {
             log.info(@"\033[1;32m%s\033[0m", @"Welcome to Beaver 0.0.1\n");
             log.info(@"\033[32m%s\033[33m - %s\033[0m", "build", "Compiles the project.");
             log.info(@"\033[32m%s\033[33m - %s\033[0m", "clean", "Deletes the build directory.");
-            log.info(@"\033[32m%s\033[33m - %s\033[0m", "validate", "Reads out and prints information from the project's build.beaver for manual inspection.");
-            log.info(@"");
+            log.info(@"\033[32m%s\033[33m - %s\033[0m", "validate", "Reads out and prints information from the project's build.beaver for manual inspection.\n");
             return 0;
         }
     }
