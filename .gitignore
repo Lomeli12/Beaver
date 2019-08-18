@@ -1,4 +1,9 @@
-build/
+# Directories
 .beaver/
+.vscode/
+build/
+
+# Files
 beaver
+beaver.exe
 update.sh
