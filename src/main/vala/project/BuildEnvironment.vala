@@ -9,6 +9,7 @@ namespace Beaver.Project {
         public static const string SOURCE_FOLDER = "src/";
         public static const string MAIN_FOLDER = SOURCE_FOLDER + "main/";
         public static const string CODE_FOLDER = MAIN_FOLDER + "vala/";
+        public static const string VAPI_FOLDER = MAIN_FOLDER + "vapi/";
 
         public static bool buildProject(BeaverProject project) {
             Beaver.log.info(@"Verifying project structure.");
@@ -22,28 +23,43 @@ namespace Beaver.Project {
                 Beaver.log.error(@"\033[31mCould not find main file: %s\033[0m", project.getAppInfo().getMainFile());
                 return false;
             }
-            Beaver.log.info(@"Locating source files...");
-            var sourceFiles = locateSourceFiles(CODE_FOLDER, mainFilePath, true);
-            var sources = new StringBuilder();
-            foreach (string file in sourceFiles) {
-                sources.append(file + " ");
-            }
-
+            
+            // Building command
             Beaver.log.info(@"Preparing to build...");
             makeBuildFolder();
-            var output = "-o " + BUILD_FOLDER;
+            var commandBuilder = new StringBuilder();
+            // Initial Valac command
+            commandBuilder.append_printf("valac -X -w -q -o %s", BUILD_FOLDER);
+
+            // Adding output folder and executable name
+            var exeFileName = project.getAppInfo().getName();
             if (!StringUtil.isNullOrWhitespace(project.getAppInfo().getExecutableName())) {
-                output = output + project.getAppInfo().getExecutableName() + " ";
+                exeFileName = project.getAppInfo().getExecutableName();
+            }
+            commandBuilder.append_printf("%s", exeFileName);
+
+            // Adding dependencies, if any
+            Beaver.log.info(@"Adding dependencies...");
+            foreach (var dep in project.getDependencies()) {
+                commandBuilder.append_printf(" --pkg %s", dep);
             }
 
-            var deps = new StringBuilder();
-            foreach (string dep in project.getDependencies()) {
-                deps.append("--pkg " + dep + " ");
+            // Adding Vapi, if any
+            Beaver.log.info(@"Adding VAPI files...");
+            if (!FileUtils.test(VAPI_FOLDER, FileTest.IS_DIR)) {
+                commandBuilder.append_printf(" --vapidir %s", VAPI_FOLDER);
             }
 
+            // Locating and adding source files
+            Beaver.log.info(@"Locating source files...");
+            var sourceFiles = locateSourceFiles(CODE_FOLDER, mainFilePath, true);
+            foreach (var source in sourceFiles) {
+                commandBuilder.append_printf(" %s", source);
+            }
+
+            // Run valac
             Beaver.log.info(@"Running Valac");
-            var command = "valac -X -w " + output + deps.str + sources.str;
-            var result = Posix.system(command);
+            var result = Posix.system(commandBuilder.str);
             return result == 0;
         }
 
