@@ -39,14 +39,16 @@ namespace Beaver.Project {
             commandBuilder.append_printf("%s", exeFileName);
 
             // Adding dependencies, if any
-            Beaver.log.info(@"Adding dependencies...");
-            foreach (var dep in project.getDependencies()) {
-                commandBuilder.append_printf(" --pkg %s", dep);
+            if (project.getDependencies().length > 0) {
+                Beaver.log.info(@"Adding dependencies...");
+                foreach (var dep in project.getDependencies()) {
+                    commandBuilder.append_printf(" --pkg %s", dep);
+                }
             }
 
-            // Adding Vapi, if any
-            Beaver.log.info(@"Adding VAPI files...");
+            // Adding Vapi, if 
             if (!FileUtils.test(VAPI_FOLDER, FileTest.IS_DIR)) {
+                Beaver.log.info(@"Adding VAPI files...");
                 commandBuilder.append_printf(" --vapidir %s", VAPI_FOLDER);
             }
 
@@ -58,7 +60,7 @@ namespace Beaver.Project {
             }
 
             // Run valac
-            Beaver.log.info(@"Running Valac");
+            Beaver.log.info(@"Running Valac...");
             var result = Posix.system(commandBuilder.str);
             return result == 0;
         }
