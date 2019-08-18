@@ -36,7 +36,7 @@ namespace Beaver {
                 }
                 return beaverProject;
             } catch (Error e) {
-                Beaver.log.error("Failed to parse build.beaver!\n%s\n", e.message);
+                Beaver.log.error(@"Failed to parse build.beaver!\n%s\n", e.message);
             }
             return null;
         }
