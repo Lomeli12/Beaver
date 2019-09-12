@@ -61,9 +61,11 @@ namespace Beaver {
             values[1] = infoObj.get_string_member("mainFile");
 
             // Optional Info
+            values[2] = "";
             if (infoObj.has_member("exeName")) {
                 values[2] = infoObj.get_string_member("exeName");
             }
+            values[3] = "";
             if (infoObj.has_member("version")) {
                 values[3] = infoObj.get_string_member("version");
             }
