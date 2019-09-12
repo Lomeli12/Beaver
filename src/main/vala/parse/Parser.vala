@@ -5,7 +5,7 @@ using Beaver.Project;
 namespace Beaver {
     public class Parser {
         public static BeaverProject getBuildFile() {
-            var file = File.new_for_path(BuildEnvironment.BUILD_FILE);
+            var file = File.new_for_path(BuildingConst.BUILD_FILE);
             if (!file.query_exists()) {
                 Beaver.log.error(@"Could not find build.beaver!\n");
                 return null;
