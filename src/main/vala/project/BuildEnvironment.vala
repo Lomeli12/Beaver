@@ -21,7 +21,7 @@ namespace Beaver.Project {
             makeBuildFolder();
             var commandBuilder = new StringBuilder();
             // Initial Valac command
-            commandBuilder.append_printf("valac -X -w -q --disable-warnings -o %s", BuildingConst.BUILD_FOLDER);
+            commandBuilder.append_printf("valac -X -lm -w -q --disable-warnings -o %s", BuildingConst.BUILD_FOLDER);
 
             // Adding output folder and executable name
             var exeFileName = project.getAppInfo().getName();

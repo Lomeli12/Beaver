@@ -23,7 +23,7 @@ beaver build
 or use `Valac`:
 
 ```
-valac -o beaver --pkg json-glib-1.0 --pkg gio-2.0 --pkg posix src/main/vala/Beaver.vala src/main/vala/lib/*.vala src/main/vala/lib/cmd/*.vala src/main/vala/lib/cmd/arguments/*.vala src/main/vala/logging/*.vala src/main/vala/project/*.vala src/main/vala/parse/*.vala
+valac -X -lm -o beaver --pkg json-glib-1.0 --pkg gio-2.0 --pkg posix src/main/vala/Beaver.vala src/main/vala/lib/*.vala src/main/vala/lib/cmd/*.vala src/main/vala/lib/cmd/arguments/*.vala src/main/vala/logging/*.vala src/main/vala/project/*.vala src/main/vala/parse/*.vala
 ```
 
 ## Why is it called Beaver?
